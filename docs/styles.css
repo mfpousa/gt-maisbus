@@ -1,0 +1,125 @@
+html {
+    background: #F0F0F0;
+    font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+div#content {
+    position: relative;
+    padding-top: 50px;
+    max-width: 1500px;
+    width: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+input {
+    border: none;
+    padding: 5px;
+}
+
+h2 {
+    position: relative;
+}
+
+h2 div.right {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+div#bus-lines {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.bus-line {
+    flex-grow: 0;
+}
+
+.bus-line .wrapper {
+    position: relative;
+    text-align: center;
+    min-width: 120px;
+    height: 120px;
+}
+
+--.bus-line .wrapper:hover {
+--    transform: scale(1.2);
+--    z-index: 100;
+--    transition: transform 250ms;
+--}
+
+.bus-line .wrapper, .bus-line .wrapper * {
+    cursor: pointer;
+}
+
+.bus-line .content {
+    position: absolute;
+    width: 90%;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.bus-line .number {
+    color: white;
+    font-size: 300%;
+}
+
+.bus-line .name {
+    color: white;
+    font-size: 100%;
+}
+
+.bus-line .search {
+    color: white;
+    font-size: 100%;
+}
+
+.bus-line .search b {
+    color: black;
+    background: white;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.1);
+}
+
+div#bus-line-detail {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 70%;
+    max-width: 500px;
+    transform: translateX(-50%) translateY(-55%);
+    background: white;
+    box-shadow: 0 0 20px gray;
+}
+
+div#bus-line-detail div#header{
+    position: relative;
+    padding: 1px 20px;
+    padding-right: 15%;
+    color: white;
+}
+
+div#bus-line-detail button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+div#bus-line-detail div#information {
+    overflow-y: scroll;
+    max-height: 60vh;
+    padding: 20px;
+}
