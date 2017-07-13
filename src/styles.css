@@ -29,7 +29,7 @@ h2 div.right {
     transform: translateY(-50%);
 }
 
-div#bus-lines {
+.bus-lines-list {
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
@@ -46,11 +46,11 @@ div#bus-lines {
     height: 120px;
 }
 
---.bus-line .wrapper:hover {
---    transform: scale(1.2);
---    z-index: 100;
---    transition: transform 250ms;
---}
+/*.bus-line .wrapper:hover {
+    transform: scale(1.2);
+    z-index: 100;
+    transition: transform 250ms;
+}*/
 
 .bus-line .wrapper, .bus-line .wrapper * {
     cursor: pointer;
@@ -106,8 +106,7 @@ div#bus-line-detail {
 
 div#bus-line-detail div#header{
     position: relative;
-    padding: 1px 20px;
-    padding-right: 15%;
+    padding: 1px 15% 1px 20px;
     color: white;
 }
 
@@ -122,4 +121,32 @@ div#bus-line-detail div#information {
     overflow-y: scroll;
     max-height: 60vh;
     padding: 20px;
+}
+
+.bus-stop-lines {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.bus-stop-lines .bus-line .wrapper {
+    max-width: 80px;
+    max-height: 80px;
+    min-width: 80px;
+    min-height: 80px;
+    font-size: 50%;
+}
+
+.bus-stop-lines .bus-line .wrapper:hover {
+    background: white !important;
+    outline: solid 3px;
+    transition: background 250ms, outline 250ms;
+}
+
+.bus-stop-lines .bus-line .wrapper:hover .number {
+    color: black !important;
+}
+
+.bus-stop-lines .bus-line + .bus-line {
+    margin-left: 5px;
 }

@@ -5,19 +5,25 @@
         <link rel="stylesheet" type="text/css" href="styles.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="js/data-service.js"></script>
-        <script src="js/bus-lines-component.js"></script>
+        <script src="js/bus-lines-list-component.js"></script>
+        <script src="js/bus-lines-search-component.js"></script>
+        <script src="js/bus-lines-detail-component.js"></script>
         <script src="main.js"></script>
     </head>
     <body>
         <div id="content">
-            <h2>Líneas de bus
-                <div class="right">
-                    <input id="destination" placeholder="A donde quieres ir">
-                </div>
-            </h2>
-            <div id="bus-lines">
+
+            <!--Here goes the bus line search component-->
+            <input id="destination" placeholder="A dónde quieres ir">
+            <div class="bus-lines-search" id="bus-lines-search">
+                <h2 id="default-search-results"></h2>
                 <h3 id="default-not-found"></h3>
             </div>
+            <!---->
+            <!--Here goes the bus line list component-->
+            <h2>Todas las líneas de bus</h2>
+            <div class="bus-lines-list" id="bus-lines"></div>
+            <!---->
         </div>
         <div class="overlay">
             <div id="bus-line-detail">
