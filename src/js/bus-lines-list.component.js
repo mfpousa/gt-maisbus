@@ -36,9 +36,12 @@ function BusLinesListComponent() {
 
         // Create tiles
         for (let i = 0; i < busLines.length; i++) {
-            createAndAppendBusLine(busLines[i], this.busStopsContainer, () => {
-                busLinesDetailComponent.toggleBusLineDetail(busLines[i]);
-            })
+            createComponent(BusLineTileElement, this.busStopsContainer, {
+                line: busLines[i],
+                onclick: () => {
+                    busLinesDetailComponent.toggleBusLineDetail(busLines[i]);
+                }
+            });
         }
     };
 

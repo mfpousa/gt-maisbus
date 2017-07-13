@@ -24,7 +24,7 @@ function BusLinesSearchComponent () {
             this.timeoutId = setTimeout(() => {
                 let destination = $(this.destinationInput).val();
                 updateSearchResults(this.busLines, destination);
-            }, 200);
+            }, 150);
         });
     };
 
@@ -48,13 +48,13 @@ function BusLinesSearchComponent () {
             let line = lines[i];
             if (line['trayectos'] === undefined) return;
             for (let i1 = 0; i1 < line['trayectos'].length; i1++) {
-                let trayecto = line['trayectos'][i1];
-                for (let i2 = 0; i2 < trayecto['paradas'].length; i2++) {
-                    let parada = trayecto['paradas'][i2];
+                let journey = line['trayectos'][i1];
+                for (let i2 = 0; i2 < journey['paradas'].length; i2++) {
+                    let parada = journey['paradas'][i2];
                     if (parada['nombre'].toLowerCase().includes(destination.toLowerCase())) {
                         let busStopLines = busStopsAndLines.get(parada['nombre']);
                         if (busStopLines === undefined) busStopLines = [];
-                        busStopLines.push(line);
+                        if (!busStopLines.includes(line)) busStopLines.push(line);
                         busStopsAndLines.set(parada['nombre'], busStopLines);
                     }
                 }
@@ -85,9 +85,16 @@ function BusLinesSearchComponent () {
             // Set values
             $(name).text(busStop);
             for (let i = 0; i < busStopLines.length; i++) {
-                createAndAppendBusLine(busStopLines[i], lines, () => {
-                    busLinesDetailComponent.toggleBusLineDetail(busStopLines[i]);
-                }, false);
+
+                // Create the component and append it to the list
+                createComponent(BusLineTileElement, lines, {
+                    line: busStopLines[i],
+                    onclick: () => {
+                        busLinesDetailComponent.toggleBusLineDetail(busStopLines[i]);
+                        console.log(JSON.stringify(busStopLines[i], null, "\t"));
+                    },
+                    enableAnimations: false
+                });
             }
 
             // Add bus stop to the list

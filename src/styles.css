@@ -98,13 +98,13 @@ div#bus-line-detail {
     left: 50%;
     top: 50%;
     width: 70%;
-    max-width: 500px;
+    max-width: 700px;
     transform: translateX(-50%) translateY(-55%);
     background: white;
     box-shadow: 0 0 20px gray;
 }
 
-div#bus-line-detail div#header{
+div#bus-line-detail .header{
     position: relative;
     padding: 1px 15% 1px 20px;
     color: white;
@@ -117,10 +117,43 @@ div#bus-line-detail button {
     transform: translateY(-50%);
 }
 
-div#bus-line-detail div#information {
-    overflow-y: scroll;
+div#bus-line-detail .content {
+    overflow-y: auto;
     max-height: 60vh;
     padding: 20px;
+    background: white;
+}
+
+div#bus-line-detail #journeys ul {
+    display: block;
+    position: relative;
+    padding: 0 20px 20px 20px;
+    margin: 0;
+    height: 120px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+div#bus-line-detail #journeys li {
+    display: inline-block;
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 5px;
+    text-align: center;
+    list-style: none;
+    white-space: normal;
+    border-bottom: solid 3px;
+}
+
+div#bus-line-detail #journeys li .content {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    background: transparent;
 }
 
 .bus-stop-lines {
