@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Testing JQuery library</title>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="js/data-service.js"></script>
+        <script src="js/bus-lines-component.js"></script>
+        <script src="main.js"></script>
+    </head>
+    <body>
+        <div id="content">
+            <h2>Líneas de bus
+                <div class="right">
+                    <input id="destination" placeholder="A donde quieres ir">
+                </div>
+            </h2>
+            <div id="bus-lines">
+                <h3 id="default-not-found"></h3>
+            </div>
+        </div>
+        <div class="overlay">
+            <div id="bus-line-detail">
+                <div id="header">
+                    <h2 id="title">
+                    </h2>
+                    <button id="detail-close" style="background:none;border:none;color:white">Cerrar</button>
+                </div>
+                <div id="information"></div>
+            </div>
+        </div>
+    </body>
+</html>
