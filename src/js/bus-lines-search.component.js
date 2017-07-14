@@ -31,8 +31,10 @@ function BusLinesSearchComponent () {
     let updateSearchResults = (lines, destination) => {
 
         // Remove all existing bus line tiles
-        $(this.busStopsContainer).children('.bus-stop').slideUp("slow", () => {
-            $(this).remove();
+        $.each($(this.busStopsContainer).children('.bus-stop'), (i, obj) => {
+            $(obj).slideUp("slow", () => {
+                $(obj).remove();
+            });
         });
 
         // Exit out if there is no search parameter

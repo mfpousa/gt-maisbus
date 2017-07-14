@@ -35,7 +35,7 @@ function BusLinesDetailComponent () {
             let journeys = $(this.busLineDetailElement).find('#journeys');
             $(journeys).empty();
             $(this.overlayElement).fadeIn(250);
-            $(this.busLineDetailElement).css('box-shadow', '0 0 5px -3px ' + busLine['estilo']);
+            $(this.busLineDetailElement).css('box-shadow', '0 0 5px ' + busLine['estilo']);
             $(this.busLineDetailElement).find('.header:first').css('background', busLine['estilo']);
             $(title).text(busLine['nombre']);
 

@@ -6,7 +6,7 @@ html {
 
 div#content {
     position: relative;
-    padding-top: 50px;
+    padding: 50px 0;
     max-width: 1500px;
     width: 60%;
     left: 50%;
@@ -15,9 +15,15 @@ div#content {
 
 input {
     border: none;
+    outline: none;
     border-bottom: 3px solid lightgray;
     padding: 10px;
     border-radius: 3px;
+    transition: border-color 250ms;
+}
+
+input:focus {
+    border-color: gray;
 }
 
 h2 {
@@ -104,12 +110,20 @@ div#bus-line-detail {
     transform: translateX(-50%);
     box-shadow: 0 0 20px gray;
     background: #EEE;
+    border-radius: 2px;
 }
 
 div#bus-line-detail .header{
     position: relative;
-    padding: 1px 15% 1px 20px;
+    padding: 1px 25% 1px 20px;
+}
+
+div#bus-line-detail .header #title{
+    display: inline-block;
     color: white;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 5px 10px;
+    border-radius: 2px;
 }
 
 div#bus-line-detail button {
@@ -117,6 +131,16 @@ div#bus-line-detail button {
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: background 250ms;
+}
+
+div#bus-line-detail button:hover {
+    background: rgba(0, 0, 0, 0.2);
 }
 
 div#bus-line-detail .content {
@@ -198,8 +222,18 @@ div#bus-line-detail .journey li .content {
 }
 
 .bus-stop-lines .bus-line .wrapper:hover {
-    background: #BBB !important;
+    background: #CCC !important;
     transition: background 250ms;
+}
+
+.bus-stop:first-of-type h3 {
+    padding-top: 0;
+}
+
+.bus-stop h3 {
+    margin: 0;
+    padding: 19px 0;
+    transition: padding 600ms;
 }
 
 /*.bus-stop-lines .bus-line + .bus-line {
