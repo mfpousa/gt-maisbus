@@ -16,15 +16,20 @@ function BusLinesSearchComponent () {
 
     let eventHandling = () => {
         this.timeoutId = undefined;
-        $(this.destinationInput).keyup(() => {
+        this.lastVal = undefined;
+        $(this.destinationInput).keyup((evt) => {
+            if (this.lastVal.length === 0 || evt.key.length > 1 && evt.key.toLowerCase() !== 'backspace') return;
             if (this.timeoutId !== undefined) {
                 clearTimeout(this.timeoutId);
                 this.timeoutId = undefined;
             }
             this.timeoutId = setTimeout(() => {
-                let destination = $(this.destinationInput).val();
-                updateSearchResults(this.busLines, destination);
+                let val = $(this.destinationInput).val();
+                updateSearchResults(this.busLines, val);
             }, 150);
+        });
+        $(this.destinationInput).keydown(() => {
+            this.lastVal = $(this.destinationInput).val();
         });
     };
 

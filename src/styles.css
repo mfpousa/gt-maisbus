@@ -147,10 +147,15 @@ div#bus-line-detail .content {
     overflow-y: auto;
     max-height: 60vh;
     --padding: 20px;
-    padding-bottom: 20px;
+    padding-bottom: 30px;
 }
 
 div#bus-line-detail .journey h2 {
+    margin-left: 20px;
+    margin-top: 30px;
+}
+
+div#bus-line-detail .journey h3 {
     margin-left: 20px;
 }
 
@@ -171,13 +176,14 @@ div#bus-line-detail .journey li {
     text-align: center;
     list-style: none;
     white-space: normal;
-    background: #DDD !important;
+    background: #DDD;
     border-bottom: 0;
     color: black;
+    transition: background 600ms;
 }
 
 div#bus-line-detail .journey li:nth-of-type(odd) {
-    background: #EEE !important;
+    background: #EEE;
 }
 
 div#bus-line-detail .journey li + li {
@@ -198,13 +204,26 @@ div#bus-line-detail .journey li + li::before {
 }
 
 div#bus-line-detail .journey li .content {
-    display: block;
+    display: inline-block;
     position: relative;
     bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
     background: transparent;
     padding: 0;
+    transition: background 600ms;
+}
+
+div#bus-line-detail .journey li .name {
+    --text-overflow: ellipsis;
+    --white-space: nowrap;
+}
+
+div#bus-line-detail .journey li .time {
+    display: inline-block;
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    border-radius: 3px;
+    padding: 5px 10px;
 }
 
 .bus-stop-lines {
@@ -235,6 +254,26 @@ div#bus-line-detail .journey li .content {
     padding: 19px 0;
     transition: padding 600ms;
 }
+
+div#popup {
+    display: block;
+    position: fixed;
+    left: 50%;
+    bottom: 50px;
+    width: 90%;
+    max-width: 700px;
+}
+
+div#popup .content {
+    display: block;
+    position: relative;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 3px;
+    color: white;
+    padding: 10px;
+}
+
 
 /*.bus-stop-lines .bus-line + .bus-line {
     margin-left: 5px;
@@ -275,7 +314,11 @@ div#bus-line-detail .journey li .content {
     }
 
     div#bus-line-detail .journey h2 {
-        text-align: left;
+        padding-left: 50px;
+        margin-left: 0;
+    }
+
+    div#bus-line-detail .journey h3 {
         padding-left: 50px;
         margin-left: 0;
     }
@@ -290,7 +333,7 @@ div#bus-line-detail .journey li .content {
 
     div#bus-line-detail .journey li {
         width: 100%;
-        height: 50px;
+        height: 60px;
     }
 
     div#bus-line-detail .journey li + li {
@@ -303,6 +346,7 @@ div#bus-line-detail .journey li .content {
 
     div#bus-line-detail .journey li .content {
         top: 50%;
-        transform: translateY(-50%) translateX(-50%);
+        left: 0;
+        transform: translateY(-50%);
     }
 }

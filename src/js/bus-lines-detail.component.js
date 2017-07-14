@@ -39,15 +39,69 @@ function BusLinesDetailComponent () {
             $(this.busLineDetailElement).find('.header:first').css('background', busLine['estilo']);
             $(title).text(busLine['nombre']);
 
+            popupComponent.showMessage('Descargando datos ilegítimamente desde un servidor que no es nuestro...');
+
             // Insert the information of all journeys
             busLine['trayectos'].forEach((journey) => {
+
+                // Create a new journey
                 let newJourney = $('<div class="journey"></div>');
-                $(newJourney).append($('<h2>Trayecto de ' + journey['sentido'].toLowerCase() + '</h2>'));
+                $(newJourney).html($('<h2>Trayecto de ' + journey['sentido'].toLowerCase() +
+                    '</h2><h3>(' + journey['nombre'] + ')</h3>'));
 
                 // Create a list of bus stops
                 let stopsList = $('<ul></ul>');
+                let downloadsLeft = journey['paradas'].length;
                 journey['paradas'].forEach((busStop) => {
-                    let newEntry = $('<li><div class="content">' + busStop['nombre'] + '</div></li>');
+
+                    // Create a new bus stop entry
+                    let newEntry = $('<li></li>');
+                    $(newEntry).id = busStop['id'];
+                    $(newEntry).html('<div class="content"><div class="name"></div><div class="time"></div></div>');
+                    let content = $(newEntry).find('.content');
+                    let name = $(newEntry).find('.name');
+                    let time = $(newEntry).find('.time');
+                    $(name).text(busStop['nombre']);
+                    $(time).hide();
+
+                    // Update the scheduling info for the next 20 minutes of service
+                    dataService.getSchedule(busLine['id'], busStop['id'], (data) => {
+                        downloadsLeft--;
+                        if (downloadsLeft === 0) popupComponent.hide();
+                        let currentDate = new Date(Date.now());
+                        let stopDate = new Date(Date.now());
+                        let nextBuses = [];
+                        data.forEach((time) => {
+                            let splits = time.split(':');
+                            stopDate.setHours(Number.parseInt(splits[0]));
+                            stopDate.setMinutes(Number.parseInt(splits[1]));
+                            let minsDiff = (stopDate.getTime() - currentDate.getTime()) / 1000 / 60;
+                            if (minsDiff < 0) return;
+                            nextBuses.push(Number.parseInt(minsDiff.toString()));
+                        });
+                        nextBuses.sort((a, b) => {return a - b});
+                        let maxTime = 20;
+                        let ratio = (maxTime - nextBuses[0]) / maxTime;
+
+                        // If the bus exceeds the waiting time of (20) minutes, exit
+                        if (ratio < 0) return;
+                        let col = busLine['estilo'];
+                        let colorValues = col.substr(1, col.length - 1).match(/.{2}/g);
+
+                        // Only highlight the ones with urgent due time
+                        if (ratio > 0.7) {
+                            $(time).css('background', 'rgba(' +
+                                Number.parseInt('0x' + colorValues[0]) + ', ' +
+                                Number.parseInt('0x' + colorValues[1]) + ', ' +
+                                Number.parseInt('0x' + colorValues[2]) + ', ' + ratio + ')');
+                        }
+                        if (nextBuses[0] !== undefined) {
+                            $(time).text(nextBuses[0] + ' minutos');
+                            $(time).fadeIn('slow');
+                        }
+                    });
+
+                    // Add the bus stop to the list
                     $(stopsList).append(newEntry);
                 });
 

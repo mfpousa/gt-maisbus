@@ -22,12 +22,16 @@ let dataService = (function() {
             success: callback
         });
     }
+    function getSchedule(line, stop, callback) {
+        $.get(apiUrl + '/horario/' + line + '/' + stop, callback);
+    }
 
     // Return public methods
     return {
         getBusLines: function(callback) {getBusLines(callback)},
         getBusLineById: function(line, callback) {getBusLineById(line, callback)},
         getBusStopById: function(busStop, callback) {getBusStopById(busStop, callback)},
-        getBusStopsNearBy: function(lat, lng, callback) {getBusStopsNearBy(lat, lng, callback)}
+        getBusStopsNearBy: function(lat, lng, callback) {getBusStopsNearBy(lat, lng, callback)},
+        getSchedule: function(line, stop, callback) {getSchedule(line, stop, callback)}
     }
 })();
