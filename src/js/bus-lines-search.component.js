@@ -51,22 +51,19 @@ function BusLinesSearchComponent () {
 
         // Get the lines that pass through the matching bus stops
         let busStopsAndLines = new Map();
-        for (let i = 0; i < lines.length; i++) {
-            let line = lines[i];
+        lines.forEach((line) => {
             if (line['trayectos'] === undefined) return;
-            for (let i1 = 0; i1 < line['trayectos'].length; i1++) {
-                let journey = line['trayectos'][i1];
-                for (let i2 = 0; i2 < journey['paradas'].length; i2++) {
-                    let parada = journey['paradas'][i2];
-                    if (parada['nombre'].toLowerCase().includes(destination.toLowerCase())) {
-                        let busStopLines = busStopsAndLines.get(parada['nombre']);
+            line['trayectos'].forEach((journey) => {
+                journey['paradas'].forEach(stop => {
+                    if (stop['nombre'].toLowerCase().includes(destination.toLowerCase())) {
+                        let busStopLines = busStopsAndLines.get(stop['nombre']);
                         if (busStopLines === undefined) busStopLines = [];
                         if (!busStopLines.includes(line)) busStopLines.push(line);
-                        busStopsAndLines.set(parada['nombre'], busStopLines);
+                        busStopsAndLines.set(stop['nombre'], busStopLines);
                     }
-                }
-            }
-        }
+                });
+            });
+        });
 
         // If there are no bus stops and lines to display, please fuck off
         if (busStopsAndLines.size === 0) {
@@ -98,8 +95,7 @@ function BusLinesSearchComponent () {
                 createComponent(BusLineTileElement, lines, {
                     line: busStopLines[i],
                     onclick: () => {
-                        busLinesDetailComponent.toggleBusLineDetail(busStopLines[i]);
-                        console.log(JSON.stringify(busStopLines[i], null, "\t"));
+                        busLinesDetailComponent.toggleBusLineDetail(busStopLines[i], busStop);
                     },
                     enableAnimations: false
                 });

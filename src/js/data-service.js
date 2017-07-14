@@ -25,6 +25,15 @@ let dataService = (function() {
     function getSchedule(line, stop, callback) {
         $.get(apiUrl + '/horario/' + line + '/' + stop, callback);
     }
+    function getBusStopByName(busStopName, callback) {
+        $.ajax({
+            url: apiUrl + '/paradas',
+            data: '{"nombre": "' + busStopName + '"}',
+            type: 'POST',
+            contentType: 'application/json',
+            success: callback
+        });
+    }
 
     // Return public methods
     return {
@@ -32,6 +41,7 @@ let dataService = (function() {
         getBusLineById: function(line, callback) {getBusLineById(line, callback)},
         getBusStopById: function(busStop, callback) {getBusStopById(busStop, callback)},
         getBusStopsNearBy: function(lat, lng, callback) {getBusStopsNearBy(lat, lng, callback)},
-        getSchedule: function(line, stop, callback) {getSchedule(line, stop, callback)}
+        getSchedule: function(line, stop, callback) {getSchedule(line, stop, callback)},
+        getBusStopByName: function (busStopName, callback) {getBusStopByName(busStopName, callback)}
     }
 })();

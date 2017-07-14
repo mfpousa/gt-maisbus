@@ -12,10 +12,12 @@ function PopupComponent() {
     let eventHandling = () => {
     };
 
-    this.showMessage = (message) => {
+    this.showMessage = (message, time = 2000) => {
         if (message === undefined) return;
         $(this.content).html(message);
-        $(this.popupEl).fadeIn('fast');
+        $(this.popupEl).fadeIn('slow', () => {
+            setTimeout(this.hide, time);
+        });
     };
 
     this.hide = () => {

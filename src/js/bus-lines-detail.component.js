@@ -3,6 +3,7 @@ function BusLinesDetailComponent () {
     let variableDeclarations = () => {
         this.overlayElement = $('.overlay');
         this.busLineDetailElement = $('#bus-line-detail');
+        this.updateInterval = undefined;
     };
 
     let elementUpdates = () => {
@@ -26,48 +27,57 @@ function BusLinesDetailComponent () {
     };
 
     // Create the method to toggle the bus line detail popup
-    this.toggleBusLineDetail = (busLine) => {
+    this.toggleBusLineDetail = (busLine, busStop) => {
+
+        // If no parameter is provided please exit
         if (!busLine || busLine['trayectos'] === undefined) {
             $(this.overlayElement).fadeOut(250);
             $(this.busLineDetailElement).fadeOut(250);
-        } else {
-            let title = $(this.busLineDetailElement).find('#title');
-            let journeys = $(this.busLineDetailElement).find('#journeys');
-            $(journeys).empty();
-            $(this.overlayElement).fadeIn(250);
-            $(this.busLineDetailElement).css('box-shadow', '0 0 5px ' + busLine['estilo']);
-            $(this.busLineDetailElement).find('.header:first').css('background', busLine['estilo']);
-            $(title).text(busLine['nombre']);
+            return;
+        }
 
-            popupComponent.showMessage('Descargando datos ilegítimamente desde un servidor que no es nuestro...');
+        // Load some elements
+        let title = $(this.busLineDetailElement).find('#title');
+        let journeys = $(this.busLineDetailElement).find('#journeys');
 
-            // Insert the information of all journeys
-            busLine['trayectos'].forEach((journey) => {
+        // Do some thing over those elements
+        $(title).text(busLine['nombre']);
+        $(journeys).empty();
+        $(this.overlayElement).fadeIn(250);
+        $(this.busLineDetailElement).css('box-shadow', '0 0 5px ' + busLine['estilo']);
+        $(this.busLineDetailElement).find('.header:first').css('background', busLine['estilo']);
 
-                // Create a new journey
-                let newJourney = $('<div class="journey"></div>');
-                $(newJourney).html($('<h2>Trayecto de ' + journey['sentido'].toLowerCase() +
-                    '</h2><h3>(' + journey['nombre'] + ')</h3>'));
+        popupComponent.showMessage('Actualizando datos de la línea...');
 
-                // Create a list of bus stops
-                let stopsList = $('<ul></ul>');
-                let downloadsLeft = journey['paradas'].length;
-                journey['paradas'].forEach((busStop) => {
+        // Insert the information of all journeys
+        busLine['trayectos'].forEach((journey) => {
 
-                    // Create a new bus stop entry
-                    let newEntry = $('<li></li>');
-                    $(newEntry).id = busStop['id'];
-                    $(newEntry).html('<div class="content"><div class="name"></div><div class="time"></div></div>');
-                    let content = $(newEntry).find('.content');
-                    let name = $(newEntry).find('.name');
-                    let time = $(newEntry).find('.time');
-                    $(name).text(busStop['nombre']);
-                    $(time).hide();
+            // Create a new journey
+            let newJourney = $('<div class="journey"></div>');
+            $(newJourney).html($('<h2>Trayecto de ' + journey['sentido'].toLowerCase() +
+                '</h2><h3>(' + journey['nombre'] + ')</h3>'));
 
-                    // Update the scheduling info for the next 20 minutes of service
+            // Create a list of bus stops
+            let stopsList = $('<ul></ul>');
+            journey['paradas'].forEach((busStop) => {
+
+                // Create a new bus stop entry
+                let newEntry = $('<li></li>');
+                $(newEntry).click(() => {
+                    alert(JSON.stringify(busStop, null, '\t'));
+                });
+                $(newEntry).attr('id', busStop['id']);
+                $(newEntry).html('<div class="content"><div class="name"></div><div class="time"></div></div>');
+                let content = $(newEntry).find('.content');
+                let name = $(newEntry).find('.name');
+                let time = $(newEntry).find('.time');
+                $(name).text(busStop['nombre']);
+                $(time).text('Calculando tiempo...');
+
+                // Update the scheduling info for the next 'maxTime' minutes of service
+                let maxTime = 30;
+                this.updateInterval = setInterval(() => {
                     dataService.getSchedule(busLine['id'], busStop['id'], (data) => {
-                        downloadsLeft--;
-                        if (downloadsLeft === 0) popupComponent.hide();
                         let currentDate = new Date(Date.now());
                         let stopDate = new Date(Date.now());
                         let nextBuses = [];
@@ -80,40 +90,56 @@ function BusLinesDetailComponent () {
                             nextBuses.push(Number.parseInt(minsDiff.toString()));
                         });
                         nextBuses.sort((a, b) => {return a - b});
-                        let maxTime = 20;
                         let ratio = (maxTime - nextBuses[0]) / maxTime;
 
-                        // If the bus exceeds the waiting time of (20) minutes, exit
+                        // If the bus exceeds the waiting time of 'maxTime' then exit
                         if (ratio < 0) return;
-                        let col = busLine['estilo'];
-                        let colorValues = col.substr(1, col.length - 1).match(/.{2}/g);
 
+                        let col = decomposeColor(busLine['estilo']);
                         // Only highlight the ones with urgent due time
                         if (ratio > 0.7) {
                             $(time).css('background', 'rgba(' +
-                                Number.parseInt('0x' + colorValues[0]) + ', ' +
-                                Number.parseInt('0x' + colorValues[1]) + ', ' +
-                                Number.parseInt('0x' + colorValues[2]) + ', ' + ratio + ')');
-                        }
+                                col.r + ', ' + col.g + ', ' + col.b + ', ' + ratio + ')');
+                        } else $(time).removeAttr('style');
                         if (nextBuses[0] !== undefined) {
                             $(time).text(nextBuses[0] + ' minutos');
                             $(time).fadeIn('slow');
                         }
                     });
+                }, 20000);
 
-                    // Add the bus stop to the list
-                    $(stopsList).append(newEntry);
-                });
-
-                // Add the list to the journey entry
-                $(newJourney).append(stopsList);
-
-                // Add the new journey to the journeys list
-                $(journeys).append(newJourney);
+                // Add the bus stop to the list
+                $(stopsList).append(newEntry);
             });
 
-            // Show the detail element
-            $(this.busLineDetailElement).fadeIn(250);
+            // Add the list to the journey entry
+            $(newJourney).append(stopsList);
+
+            // Add the new journey to the journeys list
+            $(journeys).append(newJourney);
+        });
+
+        // Show the detail element
+        $(this.busLineDetailElement).fadeIn(250);
+
+        // Optionally scroll to the desired bus stop
+        if (busStop !== undefined) {
+            dataService.getBusStopByName(busStop, (data) => {
+                if (data !== undefined && data[0]['id'] !== undefined) {
+                    location.href = '#' + data[0]['id'];
+                    $('#' + data[0]['id']).css({
+                        background: busLine['estilo'],
+                        borderLeft: '3px solid ' + busLine['estilo'],
+                    });
+                    setTimeout(() => {
+                        let col = decomposeColor(busLine['estilo']);
+                        $('#' + data[0]['id']).css({
+                            transition: 'background 600ms',
+                            background: 'rgba(' + col.r + ', ' + col.g + ', ' + col.b + ', 0.1)'
+                        });
+                    }, 200);
+                }
+            });
         }
     };
 
