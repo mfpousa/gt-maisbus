@@ -93,7 +93,7 @@ h2 div.right {
 }
 
 .overlay {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
@@ -102,14 +102,14 @@ h2 div.right {
 }
 
 div#bus-line-detail {
-    position: fixed;
+    position: relative;
     left: 50%;
     top: 50%;
     width: 70%;
     max-width: 700px;
     transform: translateX(-50%) translateY(-50%);
     box-shadow: 0 0 20px gray;
-    background: #EEE;
+    background: #F9F9F9;
     border-radius: 2px;
 }
 
@@ -143,10 +143,9 @@ div#bus-line-detail button:hover {
     background: rgba(0, 0, 0, 0.2);
 }
 
-div#bus-line-detail .content {
+div#bus-line-detail > .content {
     overflow-y: auto;
     max-height: 60vh;
-    --padding: 20px;
     padding-bottom: 30px;
 }
 
@@ -165,13 +164,15 @@ div#bus-line-detail .journey + .journey {
     border-left: 3px solid lightgray;
 }
 
-div#bus-line-detail .journey h2 {
-    margin-left: 20px;
+div#bus-line-detail .journey h3 {
     margin-top: 30px;
+    padding: 0 20px;
+    text-align: center;
 }
 
-div#bus-line-detail .journey h3 {
-    margin-left: 20px;
+div#bus-line-detail .journey h4 {
+    text-align: center;
+    padding: 0 20px;
 }
 
 div#bus-line-detail .journey ul {
@@ -188,13 +189,13 @@ div#bus-line-detail .journey li {
     text-align: center;
     list-style: none;
     white-space: normal;
-    background: #DDD;
+    background: #EEE;
     color: black;
     height: 80px;
 }
 
 div#bus-line-detail .journey li:nth-of-type(odd) {
-    background: #EEE;
+    background: #F9F9F9;
 }
 
 div#bus-line-detail .journey li .content {
@@ -291,14 +292,35 @@ div#popup .content {
         max-width: 100%;
     }
 
+    div#bus-line-detail > .header {
+        width: 100%;
+        background: transparent !important;
+    }
+
+    div#bus-line-detail > .header #title {
+        display: none;
+    }
+
+    div#bus-line-detail > .header #detail-close {
+        color: black;
+        z-index: 1;
+        top: 20px;
+        right: 10px;
+        background: transparent !important;
+    }
+
     div#bus-line-detail > .content {
         position: relative;
-        max-height: none;
+        max-height: 100vh;
         width: 100%;
-        height: 100%;
+        -webkit-flex: 1; /* Safari 6.1+ */
+        -ms-flex: 1; /* IE 10 */
+        flex: 1;
     }
 
     div#bus-line-detail {
+        display: flex;
+        flex-wrap: wrap;
         left: 0;
         top: 0;
         width: 100%;
@@ -310,22 +332,20 @@ div#popup .content {
         display: block;
     }
 
-    div#bus-line-detail .journey h2 {
-        padding-left: 50px;
-        margin-left: 0;
-    }
-
-    div#bus-line-detail .journey h3 {
-        padding-left: 50px;
-        margin-left: 0;
-    }
-
     div#bus-line-detail .journey ul {
         white-space: normal;
         text-align: left;
         left: 50%;
         transform: translateX(-50%);
         padding: 0 50px;
+    }
+
+    div#bus-line-detail .journey + .journey {
+        padding-top: 20px;
+    }
+
+    div#bus-line-detail .journey:last-of-type ul {
+        padding-bottom: 100px;
     }
 
     div#bus-line-detail .journey li .content {

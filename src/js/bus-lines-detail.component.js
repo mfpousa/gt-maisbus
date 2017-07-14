@@ -52,8 +52,8 @@ function BusLinesDetailComponent () {
 
             // Create a new journey
             let newJourney = $('<div class="journey"></div>');
-            $(newJourney).html($('<h2>Trayecto de ' + journey['sentido'].toLowerCase() +
-                '</h2><h3>(' + journey['nombre'] + ')</h3>'));
+            $(newJourney).html($('<h3>Trayecto de ' + journey['sentido'].toLowerCase() +
+                '</h3><h4>(' + journey['nombre'] + ')</h4>'));
 
             // Create a list of bus stops
             let stopsList = $('<ul></ul>');
@@ -130,6 +130,7 @@ function BusLinesDetailComponent () {
 
         // Optionally scroll to the desired bus stop
         if (busStop !== undefined) {
+            // TODO wrap all the bus stops in memory so that this call to the server is not needed
             dataService.getBusStopByName(busStop, (data) => {
                 if (data !== undefined && data[0]['id'] !== undefined) {
                     location.href = '#' + data[0]['id'];
