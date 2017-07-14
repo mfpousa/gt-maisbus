@@ -12,21 +12,7 @@ function BusLinesListComponent() {
         $(this.overlayElement).hide();
     };
 
-    let eventHandling = () => {
-
-        // Exit out the bus line detail popup when clicking outside the box
-        $(this.overlayElement).click((evt) => {
-            if ($(this.overlayElement)[0] === evt.target) {
-                busLinesDetailComponent.toggleBusLineDetail();
-            }
-        });
-
-        // Set up the bus line detail element (the one that opens when a tile is clicked)
-        // to hide from start and to show up when a tile is clicked
-        $(this.busLineDetailElement).find('#detail-close').click(() => {
-            busLinesDetailComponent.toggleBusLineDetail();
-        });
-    };
+    let eventHandling = () => {};
 
     // Here we create the tiles based on the provided bus lines
     let updateAndDisplayBusLines = (busLines) => {
@@ -53,16 +39,21 @@ function BusLinesListComponent() {
         // Retrieve bus lines data from server
         dataService.getBusLines((data) => {
 
+            popupComponent.showMessage('Recuperando datos del servidor. Por favor espere');
             // Retrieve all missing information from server
+            let pendingRequests = data.length;
             for (let i = 0; i < data.length; i++) {
                 dataService.getBusLineById(data[i]['codigo'], (busLineData) => {
                     data[i] = busLineData;
+                    pendingRequests--;
+                    if (pendingRequests === 0) {
+                        // Assign new information to global object
+                        this.busLines = data;
+                        updateAndDisplayBusLines(this.busLines);
+                        popupComponent.hide();
+                    }
                 });
             }
-
-            // Assign new information to global object
-            this.busLines = data;
-            updateAndDisplayBusLines(this.busLines);
         });
     };
 }

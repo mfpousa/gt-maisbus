@@ -47,8 +47,6 @@ function BusLinesDetailComponent () {
         $(this.busLineDetailElement).css('box-shadow', '0 0 5px ' + busLine['estilo']);
         $(this.busLineDetailElement).find('.header:first').css('background', busLine['estilo']);
 
-        popupComponent.showMessage('Actualizando datos de la línea...');
-
         // Insert the information of all journeys
         busLine['trayectos'].forEach((journey) => {
 
@@ -81,6 +79,8 @@ function BusLinesDetailComponent () {
                         let currentDate = new Date(Date.now());
                         let stopDate = new Date(Date.now());
                         let nextBuses = [];
+
+                        // Get the hours of all the future buses due to stop in this bus stop
                         data.forEach((time) => {
                             let splits = time.split(':');
                             stopDate.setHours(Number.parseInt(splits[0]));
@@ -89,22 +89,28 @@ function BusLinesDetailComponent () {
                             if (minsDiff < 0) return;
                             nextBuses.push(Number.parseInt(minsDiff.toString()));
                         });
+
+                        // Sort all the times from lower to higher
                         nextBuses.sort((a, b) => {return a - b});
                         let ratio = (maxTime - nextBuses[0]) / maxTime;
 
-                        // If the bus exceeds the waiting time of 'maxTime' then exit
-                        if (ratio < 0) return;
+                        // If the next bus is due to arrive in more than 'maxTime' minutes then exit
+                        if (ratio < 0) {
+                            $(time).text('En más de ' + maxTime + ' minutos');
+                            return;
+                        }
 
-                        let col = decomposeColor(busLine['estilo']);
                         // Only highlight the ones with urgent due time
                         if (ratio > 0.7) {
+                            let col = decomposeColor(busLine['estilo']);
                             $(time).css('background', 'rgba(' +
                                 col.r + ', ' + col.g + ', ' + col.b + ', ' + ratio + ')');
                         } else $(time).removeAttr('style');
-                        if (nextBuses[0] !== undefined) {
-                            $(time).text(nextBuses[0] + ' minutos');
-                            $(time).fadeIn('slow');
-                        }
+
+                        // If this code executes it means the next bus will pass in a really long time or that
+                        // the service has stopped in the specific bus stop.
+                        $(time).text(nextBuses[0] !== undefined ? nextBuses[0] + ' minutos' : 'Fin del servicio');
+                        $(time).fadeIn('slow');
                     });
                 }, 20000);
 
@@ -140,6 +146,9 @@ function BusLinesDetailComponent () {
                     }, 200);
                 }
             });
+        } else {
+            // Else scroll to the top
+            location.href = '#journeys';
         }
     };
 

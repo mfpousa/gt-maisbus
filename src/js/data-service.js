@@ -22,9 +22,11 @@ let dataService = (function() {
             success: callback
         });
     }
+
     function getSchedule(line, stop, callback) {
         $.get(apiUrl + '/horario/' + line + '/' + stop, callback);
     }
+
     function getBusStopByName(busStopName, callback) {
         $.ajax({
             url: apiUrl + '/paradas',

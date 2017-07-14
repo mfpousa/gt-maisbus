@@ -9,14 +9,13 @@ function PopupComponent() {
         this.popupEl.hide();
     };
 
-    let eventHandling = () => {
-    };
+    let eventHandling = () => {};
 
-    this.showMessage = (message, time = 2000) => {
+    this.showMessage = (message, time) => {
         if (message === undefined) return;
         $(this.content).html(message);
         $(this.popupEl).fadeIn('slow', () => {
-            setTimeout(this.hide, time);
+            if (time !== undefined) setTimeout(this.hide, time);
         });
     };
 
