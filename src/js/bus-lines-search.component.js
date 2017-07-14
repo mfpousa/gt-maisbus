@@ -10,7 +10,7 @@ function BusLinesSearchComponent () {
     };
 
     let elementUpdates = () => {
-        $(this.defaultNotFound).text('No se han encontrado coincidencias').hide();;
+        $(this.defaultNotFound).text('No se han encontrado coincidencias').hide();
         $(this.defaultSearchResults).text('Líneas que pasan por...').hide();
     };
 
@@ -61,6 +61,7 @@ function BusLinesSearchComponent () {
             }
         }
 
+        // If there are no bus stops and lines to display, please fuck off
         if (busStopsAndLines.size === 0) {
             $(this.defaultNotFound).slideDown("slow");
             $(this.defaultSearchResults).slideUp("slow");
@@ -69,10 +70,10 @@ function BusLinesSearchComponent () {
             $(this.defaultNotFound).slideUp("slow");
         }
 
-        // Display bus stops with their lines
+        // Display bus stops with their passing lines
         let busStops = this.maxBusStops;
         let animOffset = 100;
-        busStopsAndLines.forEach((busStopLines, busStop, map) => {
+        busStopsAndLines.forEach((busStopLines, busStop) => {
 
             // Get out if the busStops limit has been met
             if (busStops <= 0) return;

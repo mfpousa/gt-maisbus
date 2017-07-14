@@ -29,14 +29,14 @@ function BusLinesDetailComponent () {
     this.toggleBusLineDetail = (busLine) => {
         if (!busLine || busLine['trayectos'] === undefined) {
             $(this.overlayElement).fadeOut(250);
-            $(this.busLineDetailElement).hide(250);
+            $(this.busLineDetailElement).fadeOut(250);
         } else {
             let title = $(this.busLineDetailElement).find('#title');
             let journeys = $(this.busLineDetailElement).find('#journeys');
             $(journeys).empty();
             $(this.overlayElement).fadeIn(250);
             $(this.busLineDetailElement).css('box-shadow', '0 0 5px -3px ' + busLine['estilo']);
-            $(this.busLineDetailElement).css('background', busLine['estilo']);
+            $(this.busLineDetailElement).find('.header:first').css('background', busLine['estilo']);
             $(title).text(busLine['nombre']);
 
             // Insert the information of all journeys
@@ -48,7 +48,6 @@ function BusLinesDetailComponent () {
                 let stopsList = $('<ul></ul>');
                 journey['paradas'].forEach((busStop) => {
                     let newEntry = $('<li><div class="content">' + busStop['nombre'] + '</div></li>');
-                    $(newEntry).css('border-color', busLine['estilo']);
                     $(stopsList).append(newEntry);
                 });
 
@@ -60,7 +59,7 @@ function BusLinesDetailComponent () {
             });
 
             // Show the detail element
-            $(this.busLineDetailElement).show(250);
+            $(this.busLineDetailElement).fadeIn(250);
         }
     };
 
